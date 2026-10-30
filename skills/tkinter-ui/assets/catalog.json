@@ -1,0 +1,2326 @@
+{
+  "format": "tkui-spec",
+  "schema_version": 1,
+  "styles": {
+    "web": "现代 Web 应用风（TkWebUI）",
+    "win11": "Windows 11 Fluent（TkWin11）"
+  },
+  "icons": [
+    "plus",
+    "search",
+    "edit",
+    "play",
+    "check",
+    "library",
+    "sources",
+    "settings",
+    "controls",
+    "folder",
+    "download",
+    "back",
+    "speed",
+    "pin",
+    "chevronup",
+    "chevrondown",
+    "chevronright",
+    "collapse",
+    "expand",
+    "info"
+  ],
+  "aliases": {
+    "stack": "column",
+    "vstack": "column",
+    "frame": "column",
+    "hstack": "row",
+    "toolbar": "row",
+    "divider": "separator",
+    "listbox": "list",
+    "combobox": "combo",
+    "select": "combo",
+    "text_input": "entry",
+    "input": "entry",
+    "textarea": "text",
+    "radio": "radio_group",
+    "switch_group": "radio_group",
+    "figure": "chart",
+    "datatable": "table",
+    "data_table": "table",
+    "grid_table": "tree"
+  },
+  "common_props": {
+    "id": {
+      "kind": "str",
+      "desc": "组件 id，用于 app['id'] / app.get('id')，必须唯一"
+    },
+    "variable": {
+      "kind": "str",
+      "desc": "共享 Tk 变量名；同名控件自动共享状态"
+    },
+    "tooltip": {
+      "kind": "str",
+      "desc": "悬停提示"
+    },
+    "enabled": {
+      "kind": "bool",
+      "default": true,
+      "desc": "是否可用"
+    }
+  },
+  "layout_fields": {
+    "side": {
+      "kind": "enum",
+      "values": [
+        "top",
+        "bottom",
+        "left",
+        "right"
+      ],
+      "desc": "pack 方向"
+    },
+    "fill": {
+      "kind": "enum",
+      "values": [
+        "x",
+        "y",
+        "both",
+        "none"
+      ],
+      "desc": "填充方向"
+    },
+    "expand": {
+      "kind": "bool",
+      "desc": "是否占用剩余空间"
+    },
+    "padx": {
+      "kind": "int",
+      "desc": "水平外边距（可写 [左, 右]）"
+    },
+    "pady": {
+      "kind": "int",
+      "desc": "垂直外边距（可写 [上, 下]）"
+    },
+    "ipadx": {
+      "kind": "int",
+      "desc": "水平内边距"
+    },
+    "ipady": {
+      "kind": "int",
+      "desc": "垂直内边距"
+    },
+    "anchor": {
+      "kind": "enum",
+      "values": [
+        "n",
+        "s",
+        "e",
+        "w",
+        "center",
+        "ne",
+        "nw",
+        "se",
+        "sw"
+      ],
+      "desc": "对齐点"
+    },
+    "row": {
+      "kind": "int",
+      "desc": "grid 行（grid 父容器内）"
+    },
+    "column": {
+      "kind": "int",
+      "desc": "grid 列（grid 父容器内）"
+    },
+    "rowspan": {
+      "kind": "int",
+      "desc": "grid 跨行"
+    },
+    "columnspan": {
+      "kind": "int",
+      "desc": "grid 跨列"
+    },
+    "sticky": {
+      "kind": "str",
+      "desc": "grid 拉伸，如 nsew"
+    },
+    "weightx": {
+      "kind": "int",
+      "desc": "grid 列权重"
+    },
+    "weighty": {
+      "kind": "int",
+      "desc": "grid 行权重"
+    },
+    "width": {
+      "kind": "int",
+      "desc": "固定宽度"
+    },
+    "height": {
+      "kind": "int",
+      "desc": "固定高度"
+    }
+  },
+  "events": {
+    "click": "点击",
+    "change": "值变化",
+    "select": "选择变化（表格/图表/列表）",
+    "activate": "双击/回车激活"
+  },
+  "components": {
+    "column": {
+      "name": "column",
+      "category": "布局",
+      "summary": "纵向堆叠容器（默认填充 x）。",
+      "container": true,
+      "children": "任意非 tab 组件",
+      "props": {
+        "gap": {
+          "kind": "int",
+          "desc": "子项间距",
+          "default": 8
+        },
+        "padding": {
+          "kind": "int",
+          "desc": "容器内边距",
+          "default": 0
+        },
+        "surface": {
+          "kind": "enum",
+          "desc": "背景面",
+          "default": "panel",
+          "values": [
+            "panel",
+            "workspace",
+            "sidebar"
+          ]
+        }
+      },
+      "events": [],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "column",
+        "gap": 12,
+        "children": []
+      },
+      "notes": null
+    },
+    "row": {
+      "name": "row",
+      "category": "布局",
+      "summary": "横向排列容器，子项默认垂直填充。",
+      "container": true,
+      "children": "任意非 tab 组件",
+      "props": {
+        "gap": {
+          "kind": "int",
+          "desc": "子项间距",
+          "default": 8
+        },
+        "padding": {
+          "kind": "int",
+          "desc": "容器内边距",
+          "default": 0
+        },
+        "align": {
+          "kind": "enum",
+          "desc": "子项对齐",
+          "default": "center",
+          "values": [
+            "center",
+            "start",
+            "end",
+            "stretch"
+          ]
+        },
+        "surface": {
+          "kind": "enum",
+          "desc": "背景面",
+          "default": "panel",
+          "values": [
+            "panel",
+            "workspace",
+            "sidebar"
+          ]
+        }
+      },
+      "events": [],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "row",
+        "gap": 8,
+        "children": []
+      },
+      "notes": null
+    },
+    "grid": {
+      "name": "grid",
+      "category": "布局",
+      "summary": "网格容器；子项用 layout.row / layout.column 指定位置。",
+      "container": true,
+      "children": "任意非 tab 组件",
+      "props": {
+        "gap": {
+          "kind": "int",
+          "desc": "子项间距",
+          "default": 8
+        },
+        "padding": {
+          "kind": "int",
+          "desc": "容器内边距",
+          "default": 0
+        },
+        "columns": {
+          "kind": "int",
+          "desc": "未指定位置时自动排列的列数",
+          "default": 2
+        },
+        "surface": {
+          "kind": "enum",
+          "desc": "背景面",
+          "default": "panel",
+          "values": [
+            "panel",
+            "workspace",
+            "sidebar"
+          ]
+        }
+      },
+      "events": [],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "grid",
+        "columns": 2,
+        "children": []
+      },
+      "notes": null
+    },
+    "spacer": {
+      "name": "spacer",
+      "category": "布局",
+      "summary": "固定或弹性空白。",
+      "container": false,
+      "children": null,
+      "props": {
+        "size": {
+          "kind": "int",
+          "desc": "空白尺寸",
+          "default": 8
+        },
+        "expand": {
+          "kind": "bool",
+          "desc": "是否吸收剩余空间",
+          "default": false
+        }
+      },
+      "events": [],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "spacer",
+        "size": 12
+      },
+      "notes": null
+    },
+    "separator": {
+      "name": "separator",
+      "category": "布局",
+      "summary": "分隔线。",
+      "container": false,
+      "children": null,
+      "props": {
+        "orient": {
+          "kind": "enum",
+          "desc": "方向",
+          "default": "horizontal",
+          "values": [
+            "horizontal",
+            "vertical"
+          ]
+        }
+      },
+      "events": [],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "separator"
+      },
+      "notes": null
+    },
+    "scroll": {
+      "name": "scroll",
+      "category": "布局",
+      "summary": "可滚动区域，内容放在 body 中。",
+      "container": true,
+      "children": null,
+      "props": {
+        "height": {
+          "kind": "int",
+          "desc": "建议高度",
+          "default": 320
+        },
+        "gap": {
+          "kind": "int",
+          "desc": "子项间距",
+          "default": 10
+        },
+        "padding": {
+          "kind": "int",
+          "desc": "内容内边距",
+          "default": 0
+        }
+      },
+      "events": [],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {
+        "fill": "both",
+        "expand": true
+      },
+      "example": {
+        "type": "scroll",
+        "height": 360,
+        "children": []
+      },
+      "notes": null
+    },
+    "page": {
+      "name": "page",
+      "category": "布局",
+      "summary": "页面：标题 + 可滚动内容。通常只出现在 pages 下。",
+      "container": true,
+      "children": null,
+      "props": {
+        "title": {
+          "kind": "str",
+          "desc": "页面标题"
+        },
+        "subtitle": {
+          "kind": "str",
+          "desc": "页面副标题"
+        },
+        "scroll": {
+          "kind": "bool",
+          "desc": "内容是否可滚动",
+          "default": true
+        },
+        "padding": {
+          "kind": "int",
+          "desc": "内容内边距",
+          "default": 24
+        },
+        "gap": {
+          "kind": "int",
+          "desc": "内容间距",
+          "default": 14
+        }
+      },
+      "events": [],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {
+        "fill": "both",
+        "expand": true
+      },
+      "example": {
+        "type": "page",
+        "title": "概览",
+        "children": []
+      },
+      "notes": null
+    },
+    "card": {
+      "name": "card",
+      "category": "容器",
+      "summary": "圆角卡片容器，可点击。",
+      "container": true,
+      "children": "任意非 tab 组件",
+      "props": {
+        "selected": {
+          "kind": "bool",
+          "desc": "强调边框",
+          "default": false
+        },
+        "padding": {
+          "kind": "int",
+          "desc": "内边距",
+          "default": 16
+        },
+        "command": {
+          "kind": "action",
+          "desc": "点击卡片时执行的动作"
+        }
+      },
+      "events": [
+        "click"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "card",
+        "children": []
+      },
+      "notes": null
+    },
+    "section": {
+      "name": "section",
+      "category": "容器",
+      "summary": "带标题的分组卡片。",
+      "container": true,
+      "children": "任意非 tab 组件",
+      "props": {
+        "title": {
+          "kind": "str",
+          "desc": "分组标题"
+        },
+        "padding": {
+          "kind": "int",
+          "desc": "内边距",
+          "default": 14
+        },
+        "selected": {
+          "kind": "bool",
+          "desc": "强调边框",
+          "default": false
+        }
+      },
+      "events": [
+        "click"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "section",
+        "title": "基本设置",
+        "children": []
+      },
+      "notes": null
+    },
+    "accordion": {
+      "name": "accordion",
+      "category": "容器",
+      "summary": "可折叠分组。",
+      "container": true,
+      "children": "任意非 tab 组件",
+      "props": {
+        "title": {
+          "kind": "str",
+          "desc": "标题",
+          "required": true
+        },
+        "opened": {
+          "kind": "bool",
+          "desc": "初始展开",
+          "default": false
+        }
+      },
+      "events": [
+        "click"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "accordion",
+        "title": "高级选项",
+        "opened": true,
+        "children": []
+      },
+      "notes": null
+    },
+    "tabs": {
+      "name": "tabs",
+      "category": "容器",
+      "summary": "标签页容器，子项必须是 tab。",
+      "container": true,
+      "children": "tab",
+      "props": {
+        "padding": {
+          "kind": "int",
+          "desc": "标签内容内边距",
+          "default": 12
+        }
+      },
+      "events": [],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "tabs",
+        "children": [
+          {
+            "type": "tab",
+            "title": "一",
+            "children": []
+          }
+        ]
+      },
+      "notes": null
+    },
+    "tab": {
+      "name": "tab",
+      "category": "容器",
+      "summary": "tabs 的单个标签页。",
+      "container": true,
+      "children": "任意非 tab 组件",
+      "props": {
+        "title": {
+          "kind": "str",
+          "desc": "标签标题",
+          "required": true
+        },
+        "padding": {
+          "kind": "int",
+          "desc": "内边距",
+          "default": 12
+        }
+      },
+      "events": [],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "tab",
+        "title": "一",
+        "children": []
+      },
+      "notes": null
+    },
+    "settings_row": {
+      "name": "settings_row",
+      "category": "容器",
+      "summary": "设置行：左侧标题/说明，右侧放控件。",
+      "container": true,
+      "children": "通常放 switch / combo / button 等单个控件",
+      "props": {
+        "title": {
+          "kind": "str",
+          "desc": "标题",
+          "required": true
+        },
+        "description": {
+          "kind": "str",
+          "desc": "说明"
+        },
+        "help": {
+          "kind": "str",
+          "desc": "问号提示文字"
+        }
+      },
+      "events": [],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "settings_row",
+        "title": "自动保存",
+        "description": "退出时保存",
+        "children": [
+          {
+            "type": "switch",
+            "label": ""
+          }
+        ]
+      },
+      "notes": null
+    },
+    "settings_card": {
+      "name": "settings_card",
+      "category": "容器",
+      "summary": "带图标的设置卡片（Win11 使用原生 SettingsCard，Web 使用等价布局）。",
+      "container": true,
+      "children": "通常放 switch / combo / button 等单个控件",
+      "props": {
+        "title": {
+          "kind": "str",
+          "desc": "标题",
+          "required": true
+        },
+        "description": {
+          "kind": "str",
+          "desc": "说明"
+        },
+        "icon": {
+          "kind": "enum",
+          "desc": "左侧图标",
+          "default": "settings",
+          "values": [
+            "plus",
+            "search",
+            "edit",
+            "play",
+            "check",
+            "library",
+            "sources",
+            "settings",
+            "controls",
+            "folder",
+            "download",
+            "back",
+            "speed",
+            "pin",
+            "chevronup",
+            "chevrondown",
+            "chevronright",
+            "collapse",
+            "expand",
+            "info"
+          ]
+        },
+        "command": {
+          "kind": "action",
+          "desc": "点击动作：动作名或内置动作对象"
+        }
+      },
+      "events": [
+        "click"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "settings_card",
+        "title": "自动保存",
+        "icon": "download",
+        "children": [
+          {
+            "type": "switch",
+            "label": ""
+          }
+        ]
+      },
+      "notes": null
+    },
+    "expander": {
+      "name": "expander",
+      "category": "容器",
+      "summary": "可展开卡片（Win11 原生动画，Web 退化为 Accordion）。",
+      "container": true,
+      "children": "任意非 tab 组件",
+      "props": {
+        "title": {
+          "kind": "str",
+          "desc": "标题",
+          "required": true
+        },
+        "description": {
+          "kind": "str",
+          "desc": "说明"
+        },
+        "icon": {
+          "kind": "enum",
+          "desc": "图标",
+          "default": "settings",
+          "values": [
+            "plus",
+            "search",
+            "edit",
+            "play",
+            "check",
+            "library",
+            "sources",
+            "settings",
+            "controls",
+            "folder",
+            "download",
+            "back",
+            "speed",
+            "pin",
+            "chevronup",
+            "chevrondown",
+            "chevronright",
+            "collapse",
+            "expand",
+            "info"
+          ]
+        },
+        "opened": {
+          "kind": "bool",
+          "desc": "初始展开",
+          "default": false
+        }
+      },
+      "events": [
+        "click"
+      ],
+      "styles": [
+        "win11"
+      ],
+      "fallback": "accordion",
+      "default_layout": {},
+      "example": {
+        "type": "expander",
+        "title": "更多设置",
+        "children": []
+      },
+      "notes": null
+    },
+    "label": {
+      "name": "label",
+      "category": "文本",
+      "summary": "文本标签。",
+      "container": false,
+      "children": null,
+      "props": {
+        "text": {
+          "kind": "str",
+          "desc": "文本",
+          "default": ""
+        },
+        "style": {
+          "kind": "enum",
+          "desc": "排版",
+          "default": "body",
+          "values": [
+            "body",
+            "muted",
+            "strong",
+            "title",
+            "subtitle",
+            "caption"
+          ]
+        },
+        "wrap": {
+          "kind": "int",
+          "desc": "换行宽度（像素，0 表示不换行）",
+          "default": 0
+        },
+        "justify": {
+          "kind": "enum",
+          "desc": "多行对齐",
+          "default": "left",
+          "values": [
+            "left",
+            "center",
+            "right"
+          ]
+        },
+        "anchor": {
+          "kind": "enum",
+          "desc": "单行对齐",
+          "default": "w",
+          "values": [
+            "w",
+            "center",
+            "e"
+          ]
+        },
+        "icon": {
+          "kind": "enum",
+          "desc": "行内图标",
+          "default": null,
+          "values": [
+            "plus",
+            "search",
+            "edit",
+            "play",
+            "check",
+            "library",
+            "sources",
+            "settings",
+            "controls",
+            "folder",
+            "download",
+            "back",
+            "speed",
+            "pin",
+            "chevronup",
+            "chevrondown",
+            "chevronright",
+            "collapse",
+            "expand",
+            "info"
+          ]
+        }
+      },
+      "events": [],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "label",
+        "text": "说明文字",
+        "style": "muted"
+      },
+      "notes": null
+    },
+    "heading": {
+      "name": "heading",
+      "category": "文本",
+      "summary": "标题 + 副标题块。",
+      "container": false,
+      "children": null,
+      "props": {
+        "title": {
+          "kind": "str",
+          "desc": "标题",
+          "required": true
+        },
+        "subtitle": {
+          "kind": "str",
+          "desc": "副标题"
+        },
+        "level": {
+          "kind": "int",
+          "desc": "1 为页面标题，2 为区块标题",
+          "default": 2
+        },
+        "align": {
+          "kind": "enum",
+          "desc": "对齐",
+          "default": "w",
+          "values": [
+            "w",
+            "center",
+            "e"
+          ]
+        }
+      },
+      "events": [],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "heading",
+        "title": "数据概览",
+        "subtitle": "最近 7 天"
+      },
+      "notes": null
+    },
+    "button": {
+      "name": "button",
+      "category": "输入",
+      "summary": "按钮。",
+      "container": false,
+      "children": null,
+      "props": {
+        "text": {
+          "kind": "str",
+          "desc": "按钮文字",
+          "default": ""
+        },
+        "variant": {
+          "kind": "enum",
+          "desc": "视觉变体",
+          "default": "secondary",
+          "values": [
+            "primary",
+            "secondary",
+            "quiet",
+            "link",
+            "danger",
+            "success",
+            "toggle",
+            "tool"
+          ]
+        },
+        "icon": {
+          "kind": "enum",
+          "desc": "图标",
+          "default": null,
+          "values": [
+            "plus",
+            "search",
+            "edit",
+            "play",
+            "check",
+            "library",
+            "sources",
+            "settings",
+            "controls",
+            "folder",
+            "download",
+            "back",
+            "speed",
+            "pin",
+            "chevronup",
+            "chevrondown",
+            "chevronright",
+            "collapse",
+            "expand",
+            "info"
+          ]
+        },
+        "command": {
+          "kind": "action",
+          "desc": "点击动作：动作名或内置动作对象"
+        },
+        "width": {
+          "kind": "int",
+          "desc": "字符宽度"
+        }
+      },
+      "events": [
+        "click"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "button",
+        "text": "保存",
+        "variant": "primary",
+        "command": "save"
+      },
+      "notes": null
+    },
+    "entry": {
+      "name": "entry",
+      "category": "输入",
+      "summary": "单行输入框，可带校验。",
+      "container": false,
+      "children": null,
+      "props": {
+        "value": {
+          "kind": "str",
+          "desc": "初始值",
+          "default": ""
+        },
+        "placeholder": {
+          "kind": "str",
+          "desc": "占位提示"
+        },
+        "kind": {
+          "kind": "enum",
+          "desc": "校验类型",
+          "default": "text",
+          "values": [
+            "text",
+            "password",
+            "integer",
+            "float",
+            "email",
+            "date"
+          ]
+        },
+        "label": {
+          "kind": "str",
+          "desc": "上方标签"
+        },
+        "required": {
+          "kind": "bool",
+          "desc": "必填",
+          "default": false
+        },
+        "min": {
+          "kind": "float",
+          "desc": "数值下限"
+        },
+        "max": {
+          "kind": "float",
+          "desc": "数值上限"
+        },
+        "width": {
+          "kind": "int",
+          "desc": "字符宽度"
+        },
+        "command": {
+          "kind": "action",
+          "desc": "内容变化时执行"
+        }
+      },
+      "events": [
+        "change"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "entry",
+        "id": "name",
+        "placeholder": "请输入名称",
+        "label": "名称"
+      },
+      "notes": null
+    },
+    "text": {
+      "name": "text",
+      "category": "输入",
+      "summary": "多行文本框。",
+      "container": false,
+      "children": null,
+      "props": {
+        "value": {
+          "kind": "str",
+          "desc": "初始文本",
+          "default": ""
+        },
+        "height": {
+          "kind": "int",
+          "desc": "行数",
+          "default": 5
+        },
+        "readonly": {
+          "kind": "bool",
+          "desc": "只读",
+          "default": false
+        },
+        "wrap": {
+          "kind": "enum",
+          "desc": "换行方式",
+          "default": "word",
+          "values": [
+            "word",
+            "char",
+            "none"
+          ]
+        },
+        "command": {
+          "kind": "action",
+          "desc": "内容变化时执行"
+        }
+      },
+      "events": [
+        "change"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "text",
+        "height": 6,
+        "placeholder": "备注"
+      },
+      "notes": null
+    },
+    "combo": {
+      "name": "combo",
+      "category": "输入",
+      "summary": "下拉选择框（可编辑或只读）。",
+      "container": false,
+      "children": null,
+      "props": {
+        "values": {
+          "kind": "list",
+          "desc": "选项",
+          "default": [],
+          "required": true
+        },
+        "value": {
+          "kind": "str",
+          "desc": "初始值",
+          "default": ""
+        },
+        "readonly": {
+          "kind": "bool",
+          "desc": "只读选择",
+          "default": true
+        },
+        "placeholder": {
+          "kind": "str",
+          "desc": "占位提示"
+        },
+        "width": {
+          "kind": "int",
+          "desc": "字符宽度"
+        },
+        "command": {
+          "kind": "action",
+          "desc": "选择变化时执行"
+        }
+      },
+      "events": [
+        "change"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "combo",
+        "values": [
+          "低",
+          "中",
+          "高"
+        ],
+        "value": "中",
+        "command": "priority"
+      },
+      "notes": null
+    },
+    "dropdown": {
+      "name": "dropdown",
+      "category": "输入",
+      "summary": "带自定义浮层的下拉框。",
+      "container": false,
+      "children": null,
+      "props": {
+        "values": {
+          "kind": "list",
+          "desc": "选项",
+          "default": [],
+          "required": true
+        },
+        "value": {
+          "kind": "str",
+          "desc": "初始值",
+          "default": ""
+        },
+        "placeholder": {
+          "kind": "str",
+          "desc": "占位提示"
+        },
+        "command": {
+          "kind": "action",
+          "desc": "选择变化时执行"
+        }
+      },
+      "events": [
+        "change"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "dropdown",
+        "values": [
+          "A",
+          "B"
+        ],
+        "command": "pick"
+      },
+      "notes": null
+    },
+    "spinbox": {
+      "name": "spinbox",
+      "category": "输入",
+      "summary": "数值微调框。",
+      "container": false,
+      "children": null,
+      "props": {
+        "value": {
+          "kind": "float",
+          "desc": "初始值",
+          "default": 0
+        },
+        "min": {
+          "kind": "float",
+          "desc": "最小值",
+          "default": 0
+        },
+        "max": {
+          "kind": "float",
+          "desc": "最大值",
+          "default": 100
+        },
+        "step": {
+          "kind": "float",
+          "desc": "步长",
+          "default": 1
+        },
+        "width": {
+          "kind": "int",
+          "desc": "字符宽度",
+          "default": 8
+        },
+        "command": {
+          "kind": "action",
+          "desc": "值变化时执行"
+        }
+      },
+      "events": [
+        "change"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "spinbox",
+        "min": 1,
+        "max": 12,
+        "value": 3
+      },
+      "notes": null
+    },
+    "checkbox": {
+      "name": "checkbox",
+      "category": "输入",
+      "summary": "复选按钮。",
+      "container": false,
+      "children": null,
+      "props": {
+        "text": {
+          "kind": "str",
+          "desc": "文字",
+          "default": ""
+        },
+        "value": {
+          "kind": "bool",
+          "desc": "是否勾选",
+          "default": false
+        },
+        "command": {
+          "kind": "action",
+          "desc": "状态变化时执行"
+        }
+      },
+      "events": [
+        "change"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "checkbox",
+        "text": "记住选择",
+        "value": true
+      },
+      "notes": null
+    },
+    "radio_group": {
+      "name": "radio_group",
+      "category": "输入",
+      "summary": "一组单选按钮。",
+      "container": false,
+      "children": null,
+      "props": {
+        "options": {
+          "kind": "list",
+          "desc": "选项；字符串或 {value,label}，至少两项",
+          "required": true
+        },
+        "value": {
+          "kind": "str",
+          "desc": "当前值"
+        },
+        "orientation": {
+          "kind": "enum",
+          "desc": "排列方向",
+          "default": "horizontal",
+          "values": [
+            "horizontal",
+            "vertical"
+          ]
+        },
+        "command": {
+          "kind": "action",
+          "desc": "选择变化时执行"
+        }
+      },
+      "events": [
+        "change"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "radio_group",
+        "options": [
+          "小",
+          "中",
+          "大"
+        ],
+        "value": "中"
+      },
+      "notes": null
+    },
+    "switch": {
+      "name": "switch",
+      "category": "输入",
+      "summary": "滑动开关。",
+      "container": false,
+      "children": null,
+      "props": {
+        "label": {
+          "kind": "str",
+          "desc": "左侧标签",
+          "default": ""
+        },
+        "value": {
+          "kind": "bool",
+          "desc": "初始状态",
+          "default": false
+        },
+        "command": {
+          "kind": "action",
+          "desc": "状态变化时执行"
+        }
+      },
+      "events": [
+        "change"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "switch",
+        "label": "自动同步",
+        "value": true
+      },
+      "notes": null
+    },
+    "segmented": {
+      "name": "segmented",
+      "category": "输入",
+      "summary": "分段选择器。",
+      "container": false,
+      "children": null,
+      "props": {
+        "options": {
+          "kind": "list",
+          "desc": "选项；字符串或 {value,label}，至少两项",
+          "required": true
+        },
+        "value": {
+          "kind": "str",
+          "desc": "当前值"
+        },
+        "command": {
+          "kind": "action",
+          "desc": "选择变化时执行"
+        }
+      },
+      "events": [
+        "change"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "segmented",
+        "options": [
+          "日",
+          "周",
+          "月"
+        ],
+        "value": "日"
+      },
+      "notes": null
+    },
+    "slider": {
+      "name": "slider",
+      "category": "输入",
+      "summary": "带数值框的滑块。",
+      "container": false,
+      "children": null,
+      "props": {
+        "value": {
+          "kind": "float",
+          "desc": "当前值",
+          "default": 0
+        },
+        "min": {
+          "kind": "float",
+          "desc": "最小值",
+          "default": 0
+        },
+        "max": {
+          "kind": "float",
+          "desc": "最大值",
+          "default": 100
+        },
+        "step": {
+          "kind": "float",
+          "desc": "步长",
+          "default": 1
+        },
+        "unit": {
+          "kind": "str",
+          "desc": "单位",
+          "default": ""
+        },
+        "command": {
+          "kind": "action",
+          "desc": "值变化时执行"
+        }
+      },
+      "events": [
+        "change"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "slider",
+        "min": 0,
+        "max": 10,
+        "value": 4,
+        "unit": "级"
+      },
+      "notes": null
+    },
+    "date": {
+      "name": "date",
+      "category": "输入",
+      "summary": "日期选择框。",
+      "container": false,
+      "children": null,
+      "props": {
+        "value": {
+          "kind": "str",
+          "desc": "初始日期 YYYY-MM-DD"
+        },
+        "min": {
+          "kind": "str",
+          "desc": "最早日期"
+        },
+        "max": {
+          "kind": "str",
+          "desc": "最晚日期"
+        },
+        "command": {
+          "kind": "action",
+          "desc": "日期变化时执行"
+        }
+      },
+      "events": [
+        "change"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "date",
+        "value": "2026-10-30"
+      },
+      "notes": null
+    },
+    "keychord": {
+      "name": "keychord",
+      "category": "输入",
+      "summary": "快捷键徽章（Win11 可编辑，Web 退化为只读输入框）。",
+      "container": false,
+      "children": null,
+      "props": {
+        "value": {
+          "kind": "str",
+          "desc": "组合键",
+          "default": "Ctrl+S"
+        },
+        "command": {
+          "kind": "action",
+          "desc": "修改后执行"
+        }
+      },
+      "events": [
+        "click"
+      ],
+      "styles": [
+        "win11"
+      ],
+      "fallback": "readonly entry",
+      "default_layout": {},
+      "example": {
+        "type": "keychord",
+        "value": "Alt+Shift+A"
+      },
+      "notes": null
+    },
+    "color": {
+      "name": "color",
+      "category": "输入",
+      "summary": "颜色选择器。",
+      "container": false,
+      "children": null,
+      "props": {
+        "value": {
+          "kind": "str",
+          "desc": "颜色 #RRGGBB",
+          "default": "#087DFF"
+        },
+        "command": {
+          "kind": "action",
+          "desc": "颜色变化时执行"
+        }
+      },
+      "events": [
+        "change"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "color"
+      },
+      "notes": null
+    },
+    "font": {
+      "name": "font",
+      "category": "输入",
+      "summary": "字体选择器。",
+      "container": false,
+      "children": null,
+      "props": {
+        "value": {
+          "kind": "str",
+          "desc": "字体名",
+          "default": "TkDefaultFont"
+        }
+      },
+      "events": [
+        "change"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "font"
+      },
+      "notes": null
+    },
+    "progress": {
+      "name": "progress",
+      "category": "显示",
+      "summary": "带文字进度条。",
+      "container": false,
+      "children": null,
+      "props": {
+        "value": {
+          "kind": "float",
+          "desc": "当前值",
+          "default": 0
+        },
+        "max": {
+          "kind": "float",
+          "desc": "最大值",
+          "default": 100
+        },
+        "text": {
+          "kind": "str",
+          "desc": "前缀文字"
+        },
+        "mode": {
+          "kind": "enum",
+          "desc": "模式",
+          "default": "determinate",
+          "values": [
+            "determinate",
+            "indeterminate"
+          ]
+        },
+        "kind": {
+          "kind": "enum",
+          "desc": "语义色",
+          "default": "primary",
+          "values": [
+            "primary",
+            "success",
+            "warning",
+            "danger",
+            "info"
+          ]
+        },
+        "orient": {
+          "kind": "enum",
+          "desc": "方向",
+          "default": "horizontal",
+          "values": [
+            "horizontal",
+            "vertical"
+          ]
+        },
+        "length": {
+          "kind": "int",
+          "desc": "长度",
+          "default": 240
+        },
+        "thickness": {
+          "kind": "int",
+          "desc": "粗细",
+          "default": 28
+        }
+      },
+      "events": [],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "progress",
+        "value": 62,
+        "text": "构建"
+      },
+      "notes": null
+    },
+    "meter": {
+      "name": "meter",
+      "category": "显示",
+      "summary": "圆形/半圆仪表。",
+      "container": false,
+      "children": null,
+      "props": {
+        "value": {
+          "kind": "float",
+          "desc": "当前值",
+          "default": 0
+        },
+        "min": {
+          "kind": "float",
+          "desc": "最小值",
+          "default": 0
+        },
+        "max": {
+          "kind": "float",
+          "desc": "最大值",
+          "default": 100
+        },
+        "shape": {
+          "kind": "enum",
+          "desc": "形状",
+          "default": "full",
+          "values": [
+            "full",
+            "semi"
+          ]
+        },
+        "unit": {
+          "kind": "str",
+          "desc": "单位",
+          "default": "%"
+        },
+        "subtext": {
+          "kind": "str",
+          "desc": "副文字"
+        },
+        "interactive": {
+          "kind": "bool",
+          "desc": "可拖动",
+          "default": false
+        },
+        "size": {
+          "kind": "int",
+          "desc": "尺寸",
+          "default": 190
+        },
+        "command": {
+          "kind": "action",
+          "desc": "值变化时执行"
+        }
+      },
+      "events": [
+        "change"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "meter",
+        "value": 72,
+        "subtext": "健康度"
+      },
+      "notes": null
+    },
+    "badge": {
+      "name": "badge",
+      "category": "显示",
+      "summary": "语义色小徽章。",
+      "container": false,
+      "children": null,
+      "props": {
+        "text": {
+          "kind": "str",
+          "desc": "文字",
+          "default": ""
+        },
+        "kind": {
+          "kind": "enum",
+          "desc": "语义",
+          "default": "info",
+          "values": [
+            "info",
+            "success",
+            "warning",
+            "danger",
+            "neutral"
+          ]
+        }
+      },
+      "events": [],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "badge",
+        "text": "已完成",
+        "kind": "success"
+      },
+      "notes": null
+    },
+    "stat": {
+      "name": "stat",
+      "category": "显示",
+      "summary": "指标卡：标签、大数字、变化量。",
+      "container": false,
+      "children": null,
+      "props": {
+        "label": {
+          "kind": "str",
+          "desc": "指标名",
+          "required": true
+        },
+        "value": {
+          "kind": "str",
+          "desc": "指标值",
+          "required": true
+        },
+        "suffix": {
+          "kind": "str",
+          "desc": "单位后缀"
+        },
+        "delta": {
+          "kind": "str",
+          "desc": "变化量文字，如 +12%"
+        },
+        "kind": {
+          "kind": "enum",
+          "desc": "变化量语义",
+          "default": "info",
+          "values": [
+            "info",
+            "success",
+            "warning",
+            "danger",
+            "neutral"
+          ]
+        },
+        "icon": {
+          "kind": "enum",
+          "desc": "图标",
+          "default": null,
+          "values": [
+            "plus",
+            "search",
+            "edit",
+            "play",
+            "check",
+            "library",
+            "sources",
+            "settings",
+            "controls",
+            "folder",
+            "download",
+            "back",
+            "speed",
+            "pin",
+            "chevronup",
+            "chevrondown",
+            "chevronright",
+            "collapse",
+            "expand",
+            "info"
+          ]
+        }
+      },
+      "events": [],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "stat",
+        "label": "今日访问",
+        "value": "12,480",
+        "delta": "+8.2%",
+        "kind": "success"
+      },
+      "notes": null
+    },
+    "alert": {
+      "name": "alert",
+      "category": "显示",
+      "summary": "内联提示条。",
+      "container": false,
+      "children": null,
+      "props": {
+        "message": {
+          "kind": "str",
+          "desc": "正文",
+          "required": true
+        },
+        "title": {
+          "kind": "str",
+          "desc": "标题"
+        },
+        "kind": {
+          "kind": "enum",
+          "desc": "语义",
+          "default": "info",
+          "values": [
+            "info",
+            "success",
+            "warning",
+            "danger",
+            "neutral"
+          ]
+        }
+      },
+      "events": [],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "alert",
+        "title": "注意",
+        "message": "数据尚未保存",
+        "kind": "warning"
+      },
+      "notes": null
+    },
+    "image": {
+      "name": "image",
+      "category": "显示",
+      "summary": "图片查看器（PNG/GIF/PPM 原生，其他格式需 Pillow）。",
+      "container": false,
+      "children": null,
+      "props": {
+        "path": {
+          "kind": "str",
+          "desc": "图片路径"
+        },
+        "height": {
+          "kind": "int",
+          "desc": "初始高度",
+          "default": 300
+        }
+      },
+      "events": [],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {},
+      "example": {
+        "type": "image",
+        "height": 260
+      },
+      "notes": null
+    },
+    "table": {
+      "name": "table",
+      "category": "数据",
+      "summary": "搜索、筛选、分页、导出 CSV 的数据表。",
+      "container": false,
+      "children": null,
+      "props": {
+        "columns": {
+          "kind": "list",
+          "desc": "列：字符串或 {key,text,width}",
+          "required": true
+        },
+        "rows": {
+          "kind": "list",
+          "desc": "行数据：字典或列表",
+          "default": []
+        },
+        "page_size": {
+          "kind": "int",
+          "desc": "每页行数",
+          "default": 10
+        },
+        "height": {
+          "kind": "int",
+          "desc": "可见行数",
+          "default": 8
+        },
+        "command": {
+          "kind": "action",
+          "desc": "双击行时执行"
+        }
+      },
+      "events": [
+        "activate",
+        "select"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {
+        "fill": "both",
+        "expand": true
+      },
+      "example": {
+        "type": "table",
+        "columns": [
+          "名称",
+          "数量"
+        ],
+        "rows": [
+          [
+            "资料 A",
+            12
+          ],
+          [
+            "资料 B",
+            7
+          ]
+        ]
+      },
+      "notes": null
+    },
+    "list": {
+      "name": "list",
+      "category": "数据",
+      "summary": "单列列表框。",
+      "container": false,
+      "children": null,
+      "props": {
+        "items": {
+          "kind": "list",
+          "desc": "条目",
+          "default": [],
+          "required": true
+        },
+        "value": {
+          "kind": "int",
+          "desc": "选中索引",
+          "default": -1
+        },
+        "selectmode": {
+          "kind": "enum",
+          "desc": "选择模式",
+          "default": "browse",
+          "values": [
+            "browse",
+            "single",
+            "multiple",
+            "extended"
+          ]
+        },
+        "height": {
+          "kind": "int",
+          "desc": "可见行数",
+          "default": 8
+        },
+        "command": {
+          "kind": "action",
+          "desc": "选择变化时执行"
+        }
+      },
+      "events": [
+        "change",
+        "select"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {
+        "fill": "both",
+        "expand": true
+      },
+      "example": {
+        "type": "list",
+        "items": [
+          "苹果",
+          "香蕉",
+          "橙子"
+        ],
+        "value": 0
+      },
+      "notes": null
+    },
+    "tree": {
+      "name": "tree",
+      "category": "数据",
+      "summary": "可排序多列表格。",
+      "container": false,
+      "children": null,
+      "props": {
+        "columns": {
+          "kind": "list",
+          "desc": "列",
+          "required": true
+        },
+        "rows": {
+          "kind": "list",
+          "desc": "行",
+          "default": []
+        },
+        "height": {
+          "kind": "int",
+          "desc": "可见行数",
+          "default": 8
+        },
+        "command": {
+          "kind": "action",
+          "desc": "双击行时执行"
+        }
+      },
+      "events": [
+        "activate",
+        "select"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {
+        "fill": "both",
+        "expand": true
+      },
+      "example": {
+        "type": "tree",
+        "columns": [
+          "名称",
+          "数量"
+        ],
+        "rows": [
+          [
+            "A",
+            3
+          ],
+          [
+            "B",
+            5
+          ]
+        ]
+      },
+      "notes": null
+    },
+    "spreadsheet": {
+      "name": "spreadsheet",
+      "category": "数据",
+      "summary": "Excel 式单元格表格，支持多选、复制粘贴、撤销。",
+      "container": false,
+      "children": null,
+      "props": {
+        "data": {
+          "kind": "list",
+          "desc": "二维数据",
+          "default": []
+        },
+        "rows": {
+          "kind": "int",
+          "desc": "行数",
+          "default": 30
+        },
+        "columns": {
+          "kind": "int",
+          "desc": "列数",
+          "default": 8
+        },
+        "column_width": {
+          "kind": "int",
+          "desc": "列宽",
+          "default": 122
+        },
+        "row_height": {
+          "kind": "int",
+          "desc": "行高",
+          "default": 30
+        },
+        "command": {
+          "kind": "action",
+          "desc": "内容变化时执行"
+        }
+      },
+      "events": [
+        "change"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {
+        "fill": "both",
+        "expand": true
+      },
+      "example": {
+        "type": "spreadsheet",
+        "data": [
+          [
+            "项目",
+            "数量"
+          ],
+          [
+            "资料整理",
+            "12"
+          ]
+        ]
+      },
+      "notes": null
+    },
+    "chart": {
+      "name": "chart",
+      "category": "数据",
+      "summary": "原生交互图表（折线/柱状/散点/饼/环）。",
+      "container": false,
+      "children": null,
+      "props": {
+        "kind": {
+          "kind": "enum",
+          "desc": "类型",
+          "default": "line",
+          "values": [
+            "line",
+            "column",
+            "scatter",
+            "donut",
+            "pie"
+          ]
+        },
+        "values": {
+          "kind": "list",
+          "desc": "单系列数值"
+        },
+        "labels": {
+          "kind": "list",
+          "desc": "横轴/分类标签"
+        },
+        "series": {
+          "kind": "list",
+          "desc": "多系列：[{name,values/points,color}]"
+        },
+        "data": {
+          "kind": "list",
+          "desc": "饼/环数据：[[名称,数值]] 或 [{name,value}]"
+        },
+        "height": {
+          "kind": "int",
+          "desc": "高度",
+          "default": 240
+        },
+        "command": {
+          "kind": "action",
+          "desc": "点击数据时执行，事件 value 为数据点"
+        }
+      },
+      "events": [
+        "select",
+        "click"
+      ],
+      "styles": [
+        "web",
+        "win11"
+      ],
+      "fallback": null,
+      "default_layout": {
+        "fill": "both",
+        "expand": true
+      },
+      "example": {
+        "type": "chart",
+        "kind": "line",
+        "values": [
+          12,
+          18,
+          14,
+          26
+        ],
+        "labels": [
+          "一",
+          "二",
+          "三",
+          "四"
+        ]
+      },
+      "notes": null
+    }
+  }
+}

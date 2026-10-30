@@ -1,0 +1,3332 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tkui.local/schema/tkui-1.json",
+  "title": "TkUI declarative UI spec",
+  "description": "One style-neutral spec, rendered as Web or Windows 11 Fluent.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "style": {
+      "enum": [
+        "web",
+        "win11",
+        "auto"
+      ]
+    },
+    "window": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "size": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "min_size": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "resizable": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "boolean"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            }
+          ]
+        },
+        "centered": {
+          "type": "boolean"
+        },
+        "chrome": {
+          "enum": [
+            "native",
+            "custom"
+          ]
+        },
+        "padding": {
+          "type": "integer"
+        },
+        "icon": {
+          "type": "string"
+        }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "accent": {
+          "type": "string"
+        },
+        "accent_hover": {
+          "type": "string"
+        },
+        "font_family": {
+          "type": "string"
+        },
+        "font_size": {
+          "type": "integer"
+        },
+        "dpi": {
+          "type": "boolean"
+        }
+      }
+    },
+    "nav": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "enum": [
+            "sidebar",
+            "segmented",
+            "none"
+          ]
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "required": [
+                  "key"
+                ],
+                "properties": {
+                  "key": {
+                    "type": "string"
+                  },
+                  "label": {
+                    "type": "string"
+                  },
+                  "icon": {
+                    "enum": [
+                      "plus",
+                      "search",
+                      "edit",
+                      "play",
+                      "check",
+                      "library",
+                      "sources",
+                      "settings",
+                      "controls",
+                      "folder",
+                      "download",
+                      "back",
+                      "speed",
+                      "pin",
+                      "chevronup",
+                      "chevrondown",
+                      "chevronright",
+                      "collapse",
+                      "expand",
+                      "info"
+                    ]
+                  }
+                },
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "selected": {
+          "type": "string"
+        },
+        "width": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "subtitle": {
+          "type": "string"
+        }
+      }
+    },
+    "pages": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "const": "page"
+          },
+          "title": {
+            "type": "string"
+          },
+          "subtitle": {
+            "type": "string"
+          },
+          "scroll": {
+            "type": "boolean"
+          },
+          "padding": {
+            "type": "integer"
+          },
+          "gap": {
+            "type": "integer"
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/node"
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "minProperties": 1
+    },
+    "body": {
+      "$ref": "#/$defs/node"
+    },
+    "meta": {
+      "type": "object"
+    }
+  },
+  "oneOf": [
+    {
+      "required": [
+        "body"
+      ]
+    },
+    {
+      "required": [
+        "pages"
+      ]
+    }
+  ],
+  "$defs": {
+    "node": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "column"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "gap": {
+              "type": "integer",
+              "default": 8,
+              "description": "子项间距"
+            },
+            "padding": {
+              "type": "integer",
+              "default": 0,
+              "description": "容器内边距"
+            },
+            "surface": {
+              "enum": [
+                "panel",
+                "workspace",
+                "sidebar"
+              ],
+              "default": "panel",
+              "description": "背景面"
+            },
+            "children": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/node"
+              }
+            }
+          },
+          "additionalProperties": false,
+          "description": "纵向堆叠容器（默认填充 x）。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "row"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "gap": {
+              "type": "integer",
+              "default": 8,
+              "description": "子项间距"
+            },
+            "padding": {
+              "type": "integer",
+              "default": 0,
+              "description": "容器内边距"
+            },
+            "align": {
+              "enum": [
+                "center",
+                "start",
+                "end",
+                "stretch"
+              ],
+              "default": "center",
+              "description": "子项对齐"
+            },
+            "surface": {
+              "enum": [
+                "panel",
+                "workspace",
+                "sidebar"
+              ],
+              "default": "panel",
+              "description": "背景面"
+            },
+            "children": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/node"
+              }
+            }
+          },
+          "additionalProperties": false,
+          "description": "横向排列容器，子项默认垂直填充。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "grid"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "gap": {
+              "type": "integer",
+              "default": 8,
+              "description": "子项间距"
+            },
+            "padding": {
+              "type": "integer",
+              "default": 0,
+              "description": "容器内边距"
+            },
+            "columns": {
+              "type": "integer",
+              "default": 2,
+              "description": "未指定位置时自动排列的列数"
+            },
+            "surface": {
+              "enum": [
+                "panel",
+                "workspace",
+                "sidebar"
+              ],
+              "default": "panel",
+              "description": "背景面"
+            },
+            "children": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/node"
+              }
+            }
+          },
+          "additionalProperties": false,
+          "description": "网格容器；子项用 layout.row / layout.column 指定位置。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "spacer"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "size": {
+              "type": "integer",
+              "default": 8,
+              "description": "空白尺寸"
+            },
+            "expand": {
+              "type": "boolean",
+              "default": false,
+              "description": "是否吸收剩余空间"
+            }
+          },
+          "additionalProperties": false,
+          "description": "固定或弹性空白。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "separator"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "orient": {
+              "enum": [
+                "horizontal",
+                "vertical"
+              ],
+              "default": "horizontal",
+              "description": "方向"
+            }
+          },
+          "additionalProperties": false,
+          "description": "分隔线。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "scroll"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "height": {
+              "type": "integer",
+              "default": 320,
+              "description": "建议高度"
+            },
+            "gap": {
+              "type": "integer",
+              "default": 10,
+              "description": "子项间距"
+            },
+            "padding": {
+              "type": "integer",
+              "default": 0,
+              "description": "内容内边距"
+            },
+            "children": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/node"
+              }
+            }
+          },
+          "additionalProperties": false,
+          "description": "可滚动区域，内容放在 body 中。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "page"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "title": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "页面标题"
+            },
+            "subtitle": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "页面副标题"
+            },
+            "scroll": {
+              "type": "boolean",
+              "default": true,
+              "description": "内容是否可滚动"
+            },
+            "padding": {
+              "type": "integer",
+              "default": 24,
+              "description": "内容内边距"
+            },
+            "gap": {
+              "type": "integer",
+              "default": 14,
+              "description": "内容间距"
+            },
+            "children": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/node"
+              }
+            }
+          },
+          "additionalProperties": false,
+          "description": "页面：标题 + 可滚动内容。通常只出现在 pages 下。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "card"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "selected": {
+              "type": "boolean",
+              "default": false,
+              "description": "强调边框"
+            },
+            "padding": {
+              "type": "integer",
+              "default": 16,
+              "description": "内边距"
+            },
+            "command": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ],
+              "description": "点击卡片时执行的动作"
+            },
+            "children": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/node"
+              }
+            }
+          },
+          "additionalProperties": false,
+          "description": "圆角卡片容器，可点击。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "section"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "title": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "分组标题"
+            },
+            "padding": {
+              "type": "integer",
+              "default": 14,
+              "description": "内边距"
+            },
+            "selected": {
+              "type": "boolean",
+              "default": false,
+              "description": "强调边框"
+            },
+            "children": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/node"
+              }
+            }
+          },
+          "additionalProperties": false,
+          "description": "带标题的分组卡片。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "title"
+          ],
+          "properties": {
+            "type": {
+              "const": "accordion"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "title": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "标题"
+            },
+            "opened": {
+              "type": "boolean",
+              "default": false,
+              "description": "初始展开"
+            },
+            "children": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/node"
+              }
+            }
+          },
+          "additionalProperties": false,
+          "description": "可折叠分组。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "tabs"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "padding": {
+              "type": "integer",
+              "default": 12,
+              "description": "标签内容内边距"
+            },
+            "children": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/node"
+              }
+            }
+          },
+          "additionalProperties": false,
+          "description": "标签页容器，子项必须是 tab。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "title"
+          ],
+          "properties": {
+            "type": {
+              "const": "tab"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "title": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "标签标题"
+            },
+            "padding": {
+              "type": "integer",
+              "default": 12,
+              "description": "内边距"
+            },
+            "children": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/node"
+              }
+            }
+          },
+          "additionalProperties": false,
+          "description": "tabs 的单个标签页。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "title"
+          ],
+          "properties": {
+            "type": {
+              "const": "settings_row"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "title": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "标题"
+            },
+            "description": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "说明"
+            },
+            "help": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "问号提示文字"
+            },
+            "children": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/node"
+              }
+            }
+          },
+          "additionalProperties": false,
+          "description": "设置行：左侧标题/说明，右侧放控件。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "title"
+          ],
+          "properties": {
+            "type": {
+              "const": "settings_card"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "title": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "标题"
+            },
+            "description": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "说明"
+            },
+            "icon": {
+              "enum": [
+                "plus",
+                "search",
+                "edit",
+                "play",
+                "check",
+                "library",
+                "sources",
+                "settings",
+                "controls",
+                "folder",
+                "download",
+                "back",
+                "speed",
+                "pin",
+                "chevronup",
+                "chevrondown",
+                "chevronright",
+                "collapse",
+                "expand",
+                "info"
+              ],
+              "default": "settings",
+              "description": "左侧图标"
+            },
+            "command": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ],
+              "description": "点击动作：动作名或内置动作对象"
+            },
+            "children": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/node"
+              }
+            }
+          },
+          "additionalProperties": false,
+          "description": "带图标的设置卡片（Win11 使用原生 SettingsCard，Web 使用等价布局）。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "title"
+          ],
+          "properties": {
+            "type": {
+              "const": "expander"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "title": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "标题"
+            },
+            "description": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "说明"
+            },
+            "icon": {
+              "enum": [
+                "plus",
+                "search",
+                "edit",
+                "play",
+                "check",
+                "library",
+                "sources",
+                "settings",
+                "controls",
+                "folder",
+                "download",
+                "back",
+                "speed",
+                "pin",
+                "chevronup",
+                "chevrondown",
+                "chevronright",
+                "collapse",
+                "expand",
+                "info"
+              ],
+              "default": "settings",
+              "description": "图标"
+            },
+            "opened": {
+              "type": "boolean",
+              "default": false,
+              "description": "初始展开"
+            },
+            "children": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/node"
+              }
+            }
+          },
+          "additionalProperties": false,
+          "description": "可展开卡片（Win11 原生动画，Web 退化为 Accordion）。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "label"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "text": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "default": "",
+              "description": "文本"
+            },
+            "style": {
+              "enum": [
+                "body",
+                "muted",
+                "strong",
+                "title",
+                "subtitle",
+                "caption"
+              ],
+              "default": "body",
+              "description": "排版"
+            },
+            "wrap": {
+              "type": "integer",
+              "default": 0,
+              "description": "换行宽度（像素，0 表示不换行）"
+            },
+            "justify": {
+              "enum": [
+                "left",
+                "center",
+                "right"
+              ],
+              "default": "left",
+              "description": "多行对齐"
+            },
+            "anchor": {
+              "enum": [
+                "w",
+                "center",
+                "e"
+              ],
+              "default": "w",
+              "description": "单行对齐"
+            },
+            "icon": {
+              "enum": [
+                "plus",
+                "search",
+                "edit",
+                "play",
+                "check",
+                "library",
+                "sources",
+                "settings",
+                "controls",
+                "folder",
+                "download",
+                "back",
+                "speed",
+                "pin",
+                "chevronup",
+                "chevrondown",
+                "chevronright",
+                "collapse",
+                "expand",
+                "info"
+              ],
+              "default": null,
+              "description": "行内图标"
+            }
+          },
+          "additionalProperties": false,
+          "description": "文本标签。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "title"
+          ],
+          "properties": {
+            "type": {
+              "const": "heading"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "title": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "标题"
+            },
+            "subtitle": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "副标题"
+            },
+            "level": {
+              "type": "integer",
+              "default": 2,
+              "description": "1 为页面标题，2 为区块标题"
+            },
+            "align": {
+              "enum": [
+                "w",
+                "center",
+                "e"
+              ],
+              "default": "w",
+              "description": "对齐"
+            }
+          },
+          "additionalProperties": false,
+          "description": "标题 + 副标题块。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "button"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "text": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "default": "",
+              "description": "按钮文字"
+            },
+            "variant": {
+              "enum": [
+                "primary",
+                "secondary",
+                "quiet",
+                "link",
+                "danger",
+                "success",
+                "toggle",
+                "tool"
+              ],
+              "default": "secondary",
+              "description": "视觉变体"
+            },
+            "icon": {
+              "enum": [
+                "plus",
+                "search",
+                "edit",
+                "play",
+                "check",
+                "library",
+                "sources",
+                "settings",
+                "controls",
+                "folder",
+                "download",
+                "back",
+                "speed",
+                "pin",
+                "chevronup",
+                "chevrondown",
+                "chevronright",
+                "collapse",
+                "expand",
+                "info"
+              ],
+              "default": null,
+              "description": "图标"
+            },
+            "command": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ],
+              "description": "点击动作：动作名或内置动作对象"
+            },
+            "width": {
+              "type": "integer",
+              "description": "字符宽度"
+            }
+          },
+          "additionalProperties": false,
+          "description": "按钮。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "entry"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "value": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "default": "",
+              "description": "初始值"
+            },
+            "placeholder": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "占位提示"
+            },
+            "kind": {
+              "enum": [
+                "text",
+                "password",
+                "integer",
+                "float",
+                "email",
+                "date"
+              ],
+              "default": "text",
+              "description": "校验类型"
+            },
+            "label": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "上方标签"
+            },
+            "required": {
+              "type": "boolean",
+              "default": false,
+              "description": "必填"
+            },
+            "min": {
+              "type": "number",
+              "description": "数值下限"
+            },
+            "max": {
+              "type": "number",
+              "description": "数值上限"
+            },
+            "width": {
+              "type": "integer",
+              "description": "字符宽度"
+            },
+            "command": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ],
+              "description": "内容变化时执行"
+            }
+          },
+          "additionalProperties": false,
+          "description": "单行输入框，可带校验。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "text"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "value": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "default": "",
+              "description": "初始文本"
+            },
+            "height": {
+              "type": "integer",
+              "default": 5,
+              "description": "行数"
+            },
+            "readonly": {
+              "type": "boolean",
+              "default": false,
+              "description": "只读"
+            },
+            "wrap": {
+              "enum": [
+                "word",
+                "char",
+                "none"
+              ],
+              "default": "word",
+              "description": "换行方式"
+            },
+            "command": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ],
+              "description": "内容变化时执行"
+            }
+          },
+          "additionalProperties": false,
+          "description": "多行文本框。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "values"
+          ],
+          "properties": {
+            "type": {
+              "const": "combo"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "values": {
+              "type": "array",
+              "default": [],
+              "description": "选项"
+            },
+            "value": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "default": "",
+              "description": "初始值"
+            },
+            "readonly": {
+              "type": "boolean",
+              "default": true,
+              "description": "只读选择"
+            },
+            "placeholder": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "占位提示"
+            },
+            "width": {
+              "type": "integer",
+              "description": "字符宽度"
+            },
+            "command": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ],
+              "description": "选择变化时执行"
+            }
+          },
+          "additionalProperties": false,
+          "description": "下拉选择框（可编辑或只读）。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "values"
+          ],
+          "properties": {
+            "type": {
+              "const": "dropdown"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "values": {
+              "type": "array",
+              "default": [],
+              "description": "选项"
+            },
+            "value": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "default": "",
+              "description": "初始值"
+            },
+            "placeholder": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "占位提示"
+            },
+            "command": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ],
+              "description": "选择变化时执行"
+            }
+          },
+          "additionalProperties": false,
+          "description": "带自定义浮层的下拉框。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "spinbox"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "value": {
+              "type": "number",
+              "default": 0,
+              "description": "初始值"
+            },
+            "min": {
+              "type": "number",
+              "default": 0,
+              "description": "最小值"
+            },
+            "max": {
+              "type": "number",
+              "default": 100,
+              "description": "最大值"
+            },
+            "step": {
+              "type": "number",
+              "default": 1,
+              "description": "步长"
+            },
+            "width": {
+              "type": "integer",
+              "default": 8,
+              "description": "字符宽度"
+            },
+            "command": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ],
+              "description": "值变化时执行"
+            }
+          },
+          "additionalProperties": false,
+          "description": "数值微调框。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "checkbox"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "text": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "default": "",
+              "description": "文字"
+            },
+            "value": {
+              "type": "boolean",
+              "default": false,
+              "description": "是否勾选"
+            },
+            "command": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ],
+              "description": "状态变化时执行"
+            }
+          },
+          "additionalProperties": false,
+          "description": "复选按钮。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "options"
+          ],
+          "properties": {
+            "type": {
+              "const": "radio_group"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "options": {
+              "type": "array",
+              "description": "选项；字符串或 {value,label}，至少两项"
+            },
+            "value": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "当前值"
+            },
+            "orientation": {
+              "enum": [
+                "horizontal",
+                "vertical"
+              ],
+              "default": "horizontal",
+              "description": "排列方向"
+            },
+            "command": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ],
+              "description": "选择变化时执行"
+            }
+          },
+          "additionalProperties": false,
+          "description": "一组单选按钮。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "switch"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "label": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "default": "",
+              "description": "左侧标签"
+            },
+            "value": {
+              "type": "boolean",
+              "default": false,
+              "description": "初始状态"
+            },
+            "command": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ],
+              "description": "状态变化时执行"
+            }
+          },
+          "additionalProperties": false,
+          "description": "滑动开关。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "options"
+          ],
+          "properties": {
+            "type": {
+              "const": "segmented"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "options": {
+              "type": "array",
+              "description": "选项；字符串或 {value,label}，至少两项"
+            },
+            "value": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "当前值"
+            },
+            "command": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ],
+              "description": "选择变化时执行"
+            }
+          },
+          "additionalProperties": false,
+          "description": "分段选择器。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "slider"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "value": {
+              "type": "number",
+              "default": 0,
+              "description": "当前值"
+            },
+            "min": {
+              "type": "number",
+              "default": 0,
+              "description": "最小值"
+            },
+            "max": {
+              "type": "number",
+              "default": 100,
+              "description": "最大值"
+            },
+            "step": {
+              "type": "number",
+              "default": 1,
+              "description": "步长"
+            },
+            "unit": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "default": "",
+              "description": "单位"
+            },
+            "command": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ],
+              "description": "值变化时执行"
+            }
+          },
+          "additionalProperties": false,
+          "description": "带数值框的滑块。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "date"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "value": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "初始日期 YYYY-MM-DD"
+            },
+            "min": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "最早日期"
+            },
+            "max": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "最晚日期"
+            },
+            "command": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ],
+              "description": "日期变化时执行"
+            }
+          },
+          "additionalProperties": false,
+          "description": "日期选择框。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "keychord"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "value": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "default": "Ctrl+S",
+              "description": "组合键"
+            },
+            "command": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ],
+              "description": "修改后执行"
+            }
+          },
+          "additionalProperties": false,
+          "description": "快捷键徽章（Win11 可编辑，Web 退化为只读输入框）。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "color"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "value": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "default": "#087DFF",
+              "description": "颜色 #RRGGBB"
+            },
+            "command": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ],
+              "description": "颜色变化时执行"
+            }
+          },
+          "additionalProperties": false,
+          "description": "颜色选择器。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "font"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "value": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "default": "TkDefaultFont",
+              "description": "字体名"
+            }
+          },
+          "additionalProperties": false,
+          "description": "字体选择器。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "progress"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "value": {
+              "type": "number",
+              "default": 0,
+              "description": "当前值"
+            },
+            "max": {
+              "type": "number",
+              "default": 100,
+              "description": "最大值"
+            },
+            "text": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "前缀文字"
+            },
+            "mode": {
+              "enum": [
+                "determinate",
+                "indeterminate"
+              ],
+              "default": "determinate",
+              "description": "模式"
+            },
+            "kind": {
+              "enum": [
+                "primary",
+                "success",
+                "warning",
+                "danger",
+                "info"
+              ],
+              "default": "primary",
+              "description": "语义色"
+            },
+            "orient": {
+              "enum": [
+                "horizontal",
+                "vertical"
+              ],
+              "default": "horizontal",
+              "description": "方向"
+            },
+            "length": {
+              "type": "integer",
+              "default": 240,
+              "description": "长度"
+            },
+            "thickness": {
+              "type": "integer",
+              "default": 28,
+              "description": "粗细"
+            }
+          },
+          "additionalProperties": false,
+          "description": "带文字进度条。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "meter"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "value": {
+              "type": "number",
+              "default": 0,
+              "description": "当前值"
+            },
+            "min": {
+              "type": "number",
+              "default": 0,
+              "description": "最小值"
+            },
+            "max": {
+              "type": "number",
+              "default": 100,
+              "description": "最大值"
+            },
+            "shape": {
+              "enum": [
+                "full",
+                "semi"
+              ],
+              "default": "full",
+              "description": "形状"
+            },
+            "unit": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "default": "%",
+              "description": "单位"
+            },
+            "subtext": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "副文字"
+            },
+            "interactive": {
+              "type": "boolean",
+              "default": false,
+              "description": "可拖动"
+            },
+            "size": {
+              "type": "integer",
+              "default": 190,
+              "description": "尺寸"
+            },
+            "command": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ],
+              "description": "值变化时执行"
+            }
+          },
+          "additionalProperties": false,
+          "description": "圆形/半圆仪表。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "badge"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "text": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "default": "",
+              "description": "文字"
+            },
+            "kind": {
+              "enum": [
+                "info",
+                "success",
+                "warning",
+                "danger",
+                "neutral"
+              ],
+              "default": "info",
+              "description": "语义"
+            }
+          },
+          "additionalProperties": false,
+          "description": "语义色小徽章。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "label",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "const": "stat"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "label": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "指标名"
+            },
+            "value": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "指标值"
+            },
+            "suffix": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "单位后缀"
+            },
+            "delta": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "变化量文字，如 +12%"
+            },
+            "kind": {
+              "enum": [
+                "info",
+                "success",
+                "warning",
+                "danger",
+                "neutral"
+              ],
+              "default": "info",
+              "description": "变化量语义"
+            },
+            "icon": {
+              "enum": [
+                "plus",
+                "search",
+                "edit",
+                "play",
+                "check",
+                "library",
+                "sources",
+                "settings",
+                "controls",
+                "folder",
+                "download",
+                "back",
+                "speed",
+                "pin",
+                "chevronup",
+                "chevrondown",
+                "chevronright",
+                "collapse",
+                "expand",
+                "info"
+              ],
+              "default": null,
+              "description": "图标"
+            }
+          },
+          "additionalProperties": false,
+          "description": "指标卡：标签、大数字、变化量。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "message"
+          ],
+          "properties": {
+            "type": {
+              "const": "alert"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "message": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "正文"
+            },
+            "title": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "标题"
+            },
+            "kind": {
+              "enum": [
+                "info",
+                "success",
+                "warning",
+                "danger",
+                "neutral"
+              ],
+              "default": "info",
+              "description": "语义"
+            }
+          },
+          "additionalProperties": false,
+          "description": "内联提示条。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "image"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "path": {
+              "type": [
+                "string",
+                "number"
+              ],
+              "description": "图片路径"
+            },
+            "height": {
+              "type": "integer",
+              "default": 300,
+              "description": "初始高度"
+            }
+          },
+          "additionalProperties": false,
+          "description": "图片查看器（PNG/GIF/PPM 原生，其他格式需 Pillow）。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "columns"
+          ],
+          "properties": {
+            "type": {
+              "const": "table"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "columns": {
+              "type": "array",
+              "description": "列：字符串或 {key,text,width}"
+            },
+            "rows": {
+              "type": "array",
+              "default": [],
+              "description": "行数据：字典或列表"
+            },
+            "page_size": {
+              "type": "integer",
+              "default": 10,
+              "description": "每页行数"
+            },
+            "height": {
+              "type": "integer",
+              "default": 8,
+              "description": "可见行数"
+            },
+            "command": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ],
+              "description": "双击行时执行"
+            }
+          },
+          "additionalProperties": false,
+          "description": "搜索、筛选、分页、导出 CSV 的数据表。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "items"
+          ],
+          "properties": {
+            "type": {
+              "const": "list"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "items": {
+              "type": "array",
+              "default": [],
+              "description": "条目"
+            },
+            "value": {
+              "type": "integer",
+              "default": -1,
+              "description": "选中索引"
+            },
+            "selectmode": {
+              "enum": [
+                "browse",
+                "single",
+                "multiple",
+                "extended"
+              ],
+              "default": "browse",
+              "description": "选择模式"
+            },
+            "height": {
+              "type": "integer",
+              "default": 8,
+              "description": "可见行数"
+            },
+            "command": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ],
+              "description": "选择变化时执行"
+            }
+          },
+          "additionalProperties": false,
+          "description": "单列列表框。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "columns"
+          ],
+          "properties": {
+            "type": {
+              "const": "tree"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "columns": {
+              "type": "array",
+              "description": "列"
+            },
+            "rows": {
+              "type": "array",
+              "default": [],
+              "description": "行"
+            },
+            "height": {
+              "type": "integer",
+              "default": 8,
+              "description": "可见行数"
+            },
+            "command": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ],
+              "description": "双击行时执行"
+            }
+          },
+          "additionalProperties": false,
+          "description": "可排序多列表格。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "spreadsheet"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "data": {
+              "type": "array",
+              "default": [],
+              "description": "二维数据"
+            },
+            "rows": {
+              "type": "integer",
+              "default": 30,
+              "description": "行数"
+            },
+            "columns": {
+              "type": "integer",
+              "default": 8,
+              "description": "列数"
+            },
+            "column_width": {
+              "type": "integer",
+              "default": 122,
+              "description": "列宽"
+            },
+            "row_height": {
+              "type": "integer",
+              "default": 30,
+              "description": "行高"
+            },
+            "command": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ],
+              "description": "内容变化时执行"
+            }
+          },
+          "additionalProperties": false,
+          "description": "Excel 式单元格表格，支持多选、复制粘贴、撤销。"
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "chart"
+            },
+            "id": {
+              "type": "string"
+            },
+            "variable": {
+              "type": "string"
+            },
+            "tooltip": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "layout": {
+              "$ref": "#/$defs/layout"
+            },
+            "on": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/action"
+              }
+            },
+            "kind": {
+              "enum": [
+                "line",
+                "column",
+                "scatter",
+                "donut",
+                "pie"
+              ],
+              "default": "line",
+              "description": "类型"
+            },
+            "values": {
+              "type": "array",
+              "description": "单系列数值"
+            },
+            "labels": {
+              "type": "array",
+              "description": "横轴/分类标签"
+            },
+            "series": {
+              "type": "array",
+              "description": "多系列：[{name,values/points,color}]"
+            },
+            "data": {
+              "type": "array",
+              "description": "饼/环数据：[[名称,数值]] 或 [{name,value}]"
+            },
+            "height": {
+              "type": "integer",
+              "default": 240,
+              "description": "高度"
+            },
+            "command": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ],
+              "description": "点击数据时执行，事件 value 为数据点"
+            }
+          },
+          "additionalProperties": false,
+          "description": "原生交互图表（折线/柱状/散点/饼/环）。"
+        }
+      ]
+    },
+    "page": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "const": "page"
+        },
+        "title": {
+          "type": "string"
+        },
+        "subtitle": {
+          "type": "string"
+        },
+        "scroll": {
+          "type": "boolean"
+        },
+        "padding": {
+          "type": "integer"
+        },
+        "gap": {
+          "type": "integer"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "layout": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "side": {
+          "enum": [
+            "top",
+            "bottom",
+            "left",
+            "right"
+          ],
+          "description": "pack 方向"
+        },
+        "fill": {
+          "enum": [
+            "x",
+            "y",
+            "both",
+            "none"
+          ],
+          "description": "填充方向"
+        },
+        "expand": {
+          "type": "boolean",
+          "description": "是否占用剩余空间"
+        },
+        "padx": {
+          "oneOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            }
+          ],
+          "description": "水平外边距（可写 [左, 右]）"
+        },
+        "pady": {
+          "oneOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            }
+          ],
+          "description": "垂直外边距（可写 [上, 下]）"
+        },
+        "ipadx": {
+          "type": "integer",
+          "description": "水平内边距"
+        },
+        "ipady": {
+          "type": "integer",
+          "description": "垂直内边距"
+        },
+        "anchor": {
+          "enum": [
+            "n",
+            "s",
+            "e",
+            "w",
+            "center",
+            "ne",
+            "nw",
+            "se",
+            "sw"
+          ],
+          "description": "对齐点"
+        },
+        "row": {
+          "type": "integer",
+          "description": "grid 行（grid 父容器内）"
+        },
+        "column": {
+          "type": "integer",
+          "description": "grid 列（grid 父容器内）"
+        },
+        "rowspan": {
+          "type": "integer",
+          "description": "grid 跨行"
+        },
+        "columnspan": {
+          "type": "integer",
+          "description": "grid 跨列"
+        },
+        "sticky": {
+          "type": "string",
+          "description": "grid 拉伸，如 nsew"
+        },
+        "weightx": {
+          "type": "integer",
+          "description": "grid 列权重"
+        },
+        "weighty": {
+          "type": "integer",
+          "description": "grid 行权重"
+        },
+        "width": {
+          "type": "integer",
+          "description": "固定宽度"
+        },
+        "height": {
+          "type": "integer",
+          "description": "固定高度"
+        }
+      }
+    },
+    "action": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/action"
+          }
+        }
+      ]
+    }
+  }
+}

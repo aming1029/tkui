@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "title": "最小示例",
+  "window": {
+    "size": [900, 620]
+  },
+  "body": {
+    "type": "column",
+    "gap": 14,
+    "padding": 24,
+    "children": [
+      {
+        "type": "heading",
+        "title": "你好，TkUI",
+        "subtitle": "同一份规格，两种原生 Tk 外观"
+      },
+      {
+        "type": "entry",
+        "id": "name",
+        "label": "名称",
+        "placeholder": "请输入名称"
+      },
+      {
+        "type": "row",
+        "gap": 8,
+        "children": [
+          {
+            "type": "button",
+            "text": "保存",
+            "variant": "primary",
+            "command": "save"
+          },
+          {
+            "type": "button",
+            "text": "切换到 Win11",
+            "variant": "quiet",
+            "command": {
+              "action": "style",
+              "style": "win11"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

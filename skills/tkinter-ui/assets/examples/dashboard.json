@@ -1,0 +1,301 @@
+{
+  "version": 1,
+  "title": "项目脉搏",
+  "window": {
+    "size": [
+      1120,
+      760
+    ],
+    "min_size": [
+      900,
+      600
+    ],
+    "centered": true
+  },
+  "nav": {
+    "mode": "sidebar",
+    "selected": "overview",
+    "items": [
+      {
+        "key": "overview",
+        "label": "概览",
+        "icon": "speed"
+      },
+      {
+        "key": "tasks",
+        "label": "任务",
+        "icon": "library"
+      },
+      {
+        "key": "settings",
+        "label": "设置",
+        "icon": "settings"
+      }
+    ]
+  },
+  "pages": {
+    "overview": {
+      "type": "page",
+      "title": "项目概览",
+      "subtitle": "最近 7 天的进展与风险",
+      "children": [
+        {
+          "type": "row",
+          "gap": 12,
+          "children": [
+            {
+              "type": "stat",
+              "label": "进行中",
+              "value": "8",
+              "delta": "+2",
+              "kind": "info",
+              "icon": "controls",
+              "layout": {
+                "fill": "both",
+                "expand": true
+              }
+            },
+            {
+              "type": "stat",
+              "label": "已完成",
+              "value": "24",
+              "delta": "+12%",
+              "kind": "success",
+              "icon": "check",
+              "layout": {
+                "fill": "both",
+                "expand": true
+              }
+            },
+            {
+              "type": "stat",
+              "label": "风险项",
+              "value": "3",
+              "delta": "-1",
+              "kind": "warning",
+              "icon": "info",
+              "layout": {
+                "fill": "both",
+                "expand": true
+              }
+            }
+          ]
+        },
+        {
+          "type": "grid",
+          "columns": 2,
+          "gap": 14,
+          "children": [
+            {
+              "type": "section",
+              "title": "本周提交",
+              "children": [
+                {
+                  "type": "chart",
+                  "kind": "column",
+                  "values": [
+                    12,
+                    18,
+                    9,
+                    22,
+                    17,
+                    26,
+                    14
+                  ],
+                  "labels": [
+                    "一",
+                    "二",
+                    "三",
+                    "四",
+                    "五",
+                    "六",
+                    "日"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "section",
+              "title": "健康度",
+              "children": [
+                {
+                  "type": "meter",
+                  "value": 76,
+                  "subtext": "团队负载",
+                  "layout": {
+                    "fill": "none"
+                  }
+                },
+                {
+                  "type": "progress",
+                  "value": 68,
+                  "text": "里程碑"
+                },
+                {
+                  "type": "alert",
+                  "kind": "warning",
+                  "title": "注意",
+                  "message": "有 2 个任务超过预计工期。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "tasks": {
+      "type": "page",
+      "title": "任务列表",
+      "subtitle": "搜索、筛选和分页由 table 自动提供",
+      "children": [
+        {
+          "type": "row",
+          "children": [
+            {
+              "type": "button",
+              "text": "新建任务",
+              "variant": "primary",
+              "icon": "plus",
+              "command": {
+                "action": "notify",
+                "message": "可以接自己的新建逻辑",
+                "kind": "success"
+              }
+            },
+            {
+              "type": "spacer",
+              "expand": true
+            },
+            {
+              "type": "segmented",
+              "id": "scope",
+              "options": [
+                "全部",
+                "我的"
+              ],
+              "value": "全部"
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "columns": [
+            {
+              "key": "name",
+              "text": "任务",
+              "width": 260
+            },
+            {
+              "key": "owner",
+              "text": "负责人",
+              "width": 120
+            },
+            {
+              "key": "status",
+              "text": "状态",
+              "width": 100
+            },
+            {
+              "key": "due",
+              "text": "截止",
+              "width": 120
+            }
+          ],
+          "rows": [
+            [
+              "支付联调",
+              "小林",
+              "进行中",
+              "10-31"
+            ],
+            [
+              "权限审计",
+              "阿澈",
+              "待开始",
+              "11-03"
+            ],
+            [
+              "数据回填",
+              "Mia",
+              "已完成",
+              "10-28"
+            ]
+          ]
+        }
+      ]
+    },
+    "settings": {
+      "type": "page",
+      "title": "设置",
+      "children": [
+        {
+          "type": "settings_card",
+          "title": "自动保存",
+          "description": "退出时保存当前设置",
+          "icon": "download",
+          "children": [
+            {
+              "type": "switch",
+              "id": "autosave",
+              "value": true
+            }
+          ]
+        },
+        {
+          "type": "settings_row",
+          "title": "主题",
+          "description": "切换后程序会重启",
+          "children": [
+            {
+              "type": "segmented",
+              "id": "look",
+              "options": [
+                {
+                  "value": "web",
+                  "label": "Web"
+                },
+                {
+                  "value": "win11",
+                  "label": "Win11"
+                }
+              ],
+              "value": "web",
+              "command": {
+                "action": "style",
+                "style": "$value"
+              }
+            }
+          ]
+        },
+        {
+          "type": "expander",
+          "title": "高级选项",
+          "description": "仅 Win11 使用原生展开动画，Web 自动降级",
+          "opened": false,
+          "children": [
+            {
+              "type": "settings_row",
+              "title": "快捷键",
+              "children": [
+                {
+                  "type": "keychord",
+                  "value": "Ctrl+S"
+                }
+              ]
+            },
+            {
+              "type": "settings_row",
+              "title": "日期",
+              "children": [
+                {
+                  "type": "date",
+                  "value": "2026-10-30"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

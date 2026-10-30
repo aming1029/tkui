@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tkui-ai"
+version = "0.1.0"
+description = "One AI-friendly declarative component layer over TkWebUI and TkWin11"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [{name = "TkUI contributors"}]
+keywords = ["tkinter", "tkwebui", "tkwin11", "declarative", "ai", "gui"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Environment :: Win32 (MS Windows)",
+  "Topic :: Software Development :: User Interfaces",
+]
+dependencies = []
+
+[tool.setuptools]
+packages = ["tkui"]
