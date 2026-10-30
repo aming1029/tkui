@@ -54,15 +54,20 @@ def add_runtime():
 def add_upstream(name):
     """Best-effort sys.path setup for a sibling upstream checkout."""
     env = os.environ.get("TKUI_TKWEBUI_PATH" if name == "tkwebui" else "TKUI_TKWIN11_PATH")
-    candidates = []
+    bases = [
+        Path.cwd(),
+        skill_dir(),
+        skill_dir() / "runtime" / "vendor",
+        skill_dir() / "runtime",
+    ]
+    if len(skill_dir().parents) > 1:
+        bases.append(skill_dir().parents[1])
     if env:
-        candidates.append(Path(env).expanduser())
-    for base in (Path.cwd(), skill_dir(), skill_dir().parents[1]):
-        candidates.append(base / f"{name}-main")
-        candidates.append(base / name)
-    for candidate in candidates:
-        package = candidate / name
-        if (package / "__init__.py").is_file():
-            _add_path(candidate.resolve())
-            return candidate
+        override = Path(env).expanduser()
+        bases.extend([override, override / name, override.parent])
+    for base in bases:
+        for package in (base / name, base / f"{name}-main" / name, base):
+            if package.name == name and (package / "__init__.py").is_file():
+                _add_path(package.parent.resolve())
+                return package.parent
     return None

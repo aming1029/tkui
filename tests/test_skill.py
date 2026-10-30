@@ -1,4 +1,6 @@
 import json
+import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -37,13 +39,20 @@ class SkillTests(unittest.TestCase):
         self.assertLess(len(body.splitlines()), 500)
 
     def test_runtime_is_in_sync(self):
-        source = ROOT / "tkui"
-        target = SKILL / "runtime" / "tkui"
-        for path in source.glob("*.py"):
-            mirror = target / path.name
-            self.assertTrue(mirror.is_file(), path.name)
-            self.assertEqual(path.read_text(encoding="utf-8"),
-                             mirror.read_text(encoding="utf-8"), path.name)
+        pairs = [
+            (ROOT / "tkui", SKILL / "runtime" / "tkui"),
+            (ROOT / "tkwebui-main" / "tkwebui",
+             SKILL / "runtime" / "vendor" / "tkwebui"),
+            (ROOT / "tkwin11-main" / "tkwin11",
+             SKILL / "runtime" / "vendor" / "tkwin11"),
+        ]
+        for source, target in pairs:
+            self.assertTrue((target / "LICENSE").is_file(), target)
+            for path in source.glob("*.py"):
+                mirror = target / path.name
+                self.assertTrue(mirror.is_file(), path.name)
+                self.assertEqual(path.read_text(encoding="utf-8"),
+                                 mirror.read_text(encoding="utf-8"), path.name)
 
     def test_examples_validate(self):
         import tkui
@@ -90,6 +99,45 @@ class SkillTests(unittest.TestCase):
         proc = run("selftest.py")
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertIn("SELFTEST OK", proc.stdout)
+
+    def test_standalone_copy_is_portable(self):
+        """A copied skill folder must work without the repo or env overrides."""
+        with tempfile.TemporaryDirectory() as tmp:
+            dst = Path(tmp) / "tkinter-ui"
+            shutil.copytree(
+                SKILL, dst,
+                ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "*.pyo"),
+            )
+            env = {key: value for key, value in os.environ.items()
+                   if not key.startswith("TKUI_") and key != "PYTHONPATH"}
+            proc = subprocess.run(
+                [sys.executable, str(dst / "scripts" / "selftest.py"), "--render"],
+                cwd=tmp, env=env, capture_output=True, text=True,
+                encoding="utf-8", timeout=180,
+            )
+            self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+            self.assertIn("SELFTEST OK", proc.stdout)
+
+            for style in ("web", "win11"):
+                out = Path(tmp) / f"standalone_{style}.py"
+                proc = subprocess.run(
+                    [sys.executable, str(dst / "scripts" / "scaffold.py"),
+                     "--style", style, "--kind", "blank", "--output", str(out)],
+                    cwd=tmp, env=env, capture_output=True, text=True,
+                    encoding="utf-8", timeout=60,
+                )
+                self.assertEqual(proc.returncode, 0, proc.stderr)
+                code = (
+                    "import tkinter as tk, runpy\n"
+                    "tk.Tk.mainloop=lambda self:(self.update_idletasks(),self.destroy())\n"
+                    f"runpy.run_path({str(out)!r}, run_name='__main__')\n"
+                )
+                proc = subprocess.run(
+                    [sys.executable, "-c", code], cwd=tmp, env=env,
+                    capture_output=True, text=True, encoding="utf-8", timeout=60,
+                )
+                self.assertEqual(proc.returncode, 0,
+                                 f"{style}\n{proc.stdout}\n{proc.stderr}")
 
 
 if __name__ == "__main__":

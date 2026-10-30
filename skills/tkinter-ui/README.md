@@ -24,16 +24,20 @@ On Windows, a directory junction works without admin rights:
 
 ```powershell
 New-Item -ItemType Junction -Path "$HOME\.codex\skills\tkinter-ui" `
-  -Target "D:\github_git\tkui\skills\tkinter-ui"
+  -Target "D:\path\to\tkui\skills\tkinter-ui"
 ```
 
 ## Requirements
 
 - Python 3.8+ with tkinter.
-- The two upstream packages available as `tkwebui` / `tkwin11`, either installed or
-  in sibling `tkwebui-main/tkwebui` and `tkwin11-main/tkwin11` folders.
-- The skill already contains the TkUI runtime in `runtime/tkui`. If you move it,
-  set `TKUI_HOME` to the directory containing `tkui/`.
+- No extra install is required: the skill bundles the TkUI runtime in
+  `runtime/tkui` and both upstream packages in
+  `runtime/vendor/tkwebui` / `runtime/vendor/tkwin11`.
+- If you prefer a project-local or pip-installed copy of the upstreams, set
+  `TKUI_TKWEBUI_PATH` / `TKUI_TKWIN11_PATH`; the bundled copy remains the
+  fallback.
+- If you move the TkUI runtime out of `runtime/`, set `TKUI_HOME` to the directory
+  containing `tkui/`.
 
 Optional environment variables:
 
@@ -76,8 +80,10 @@ assets/
   examples/            runnable examples
   images/              screenshots
 runtime/tkui/          bundled declarative runtime
+runtime/vendor/        bundled MIT upstream packages
 ```
 
 ## License
 
-MIT. TkWebUI and TkWin11 are MIT-licensed upstream projects by bvb6417.
+MIT. TkWebUI and TkWin11 are MIT-licensed upstream projects by bvb6417; their
+licenses are kept in `runtime/vendor/`.

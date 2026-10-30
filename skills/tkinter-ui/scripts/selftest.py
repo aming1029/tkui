@@ -71,6 +71,9 @@ def main(argv=None):
         for style in ("web", "win11"):
             code = (
                 "import sys\n"
+                f"sys.path.insert(0, {str(skill_dir() / 'scripts')!r})\n"
+                "from _bootstrap import add_upstream\n"
+                "add_upstream('tkwebui'); add_upstream('tkwin11')\n"
                 f"sys.path.insert(0, {str(Path(base))!r})\n"
                 "import tkui\n"
                 f"app=tkui.App({str(minimal)!r}, style={style!r},"

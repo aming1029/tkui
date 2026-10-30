@@ -3,15 +3,24 @@ import os
 import sys
 from pathlib import Path
 
-candidates = [os.environ.get("TKUI_TKWIN11_PATH"),
-              Path(__file__).resolve().parent / "tkwin11-main",
-              Path.cwd() / "tkwin11-main"]
-for candidate in candidates:
-    if not candidate:
+candidates = []
+env = os.environ.get("TKUI_TKWIN11_PATH")
+if env:
+    env = Path(env)
+    candidates += [env, env / "tkwin11", env / "tkwin11-main" / "tkwin11"]
+candidates += [
+    Path(__file__).resolve().parent / "tkwin11-main" / "tkwin11",
+    Path.cwd() / "tkwin11-main" / "tkwin11",
+]
+_here = Path(__file__).resolve()
+if len(_here.parents) > 2:
+    candidates.append(_here.parents[2] / "runtime" / "vendor" / "tkwin11")
+for package in candidates:
+    if not package:
         continue
-    candidate = Path(candidate)
-    if (candidate / "tkwin11" / "__init__.py").is_file():
-        sys.path.insert(0, str(candidate))
+    package = Path(package)
+    if (package / "__init__.py").is_file():
+        sys.path.insert(0, str(package.parent))
         break
 
 import tkinter as tk

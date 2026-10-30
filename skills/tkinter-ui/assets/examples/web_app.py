@@ -3,15 +3,24 @@ import os
 import sys
 from pathlib import Path
 
-candidates = [os.environ.get("TKUI_TKWEBUI_PATH"),
-              Path(__file__).resolve().parent / "tkwebui-main",
-              Path.cwd() / "tkwebui-main"]
-for candidate in candidates:
-    if not candidate:
+candidates = []
+env = os.environ.get("TKUI_TKWEBUI_PATH")
+if env:
+    env = Path(env)
+    candidates += [env, env / "tkwebui", env / "tkwebui-main" / "tkwebui"]
+candidates += [
+    Path(__file__).resolve().parent / "tkwebui-main" / "tkwebui",
+    Path.cwd() / "tkwebui-main" / "tkwebui",
+]
+_here = Path(__file__).resolve()
+if len(_here.parents) > 2:
+    candidates.append(_here.parents[2] / "runtime" / "vendor" / "tkwebui")
+for package in candidates:
+    if not package:
         continue
-    candidate = Path(candidate)
-    if (candidate / "tkwebui" / "__init__.py").is_file():
-        sys.path.insert(0, str(candidate))
+    package = Path(package)
+    if (package / "__init__.py").is_file():
+        sys.path.insert(0, str(package.parent))
         break
 
 import tkinter as tk

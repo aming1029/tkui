@@ -8,7 +8,8 @@ python win11_app.py        # TkWin11 form
 ```
 
 Both files include a small `sys.path` bootstrap for sibling
-`tkwebui-main/` / `tkwin11-main/` checkouts.
+`tkwebui-main/` / `tkwin11-main/` checkouts, the skill's bundled
+`runtime/vendor/` copy, or `TKUI_TKWEBUI_PATH` / `TKUI_TKWIN11_PATH`.
 
 ## Mode B — declarative specs
 

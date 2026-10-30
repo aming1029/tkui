@@ -33,6 +33,9 @@ New-Item -ItemType Junction -Path "$HOME\.codex\skills\tkinter-ui" `
 
 入口：`skills/tkinter-ui/SKILL.md`。
 
+该目录自带 `runtime/tkui` 和 `runtime/vendor/` 中的两个上游 MIT 包，可单独复制到
+任意 skills 目录；不依赖本仓库路径，也不需要额外 pip 安装。
+
 ![Web 应用风](docs/images/web-overview.png)
 
 ![Windows 11 Fluent 风](docs/images/win11-overview.png)

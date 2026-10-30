@@ -13,10 +13,11 @@ This skill covers two upstream libraries and one bundled declarative runtime:
 
 The two upstream libraries must never be imported into the same Tk interpreter.
 
-Prerequisites: Python 3.8+ with tkinter, plus `tkwebui` and/or `tkwin11`
-importable. If they live in sibling checkouts, place `tkwebui-main/tkwebui` and
-`tkwin11-main/tkwin11` next to the project, or set `TKUI_TKWEBUI_PATH` /
-`TKUI_TKWIN11_PATH`. The declarative runtime is bundled in `runtime/tkui`.
+Prerequisites: Python 3.8+ with tkinter. The skill bundles the declarative runtime
+(`runtime/tkui`) and both upstream packages (`runtime/vendor/tkwebui`,
+`runtime/vendor/tkwin11`), so it works without a separate checkout. If the project
+already has `tkwebui` / `tkwin11` installed or vendored, those still work; override
+with `TKUI_TKWEBUI_PATH` / `TKUI_TKWIN11_PATH` when needed.
 
 ## Step 0 — Choose the implementation shape
 
